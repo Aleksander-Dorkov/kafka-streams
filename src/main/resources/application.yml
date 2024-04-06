@@ -1,0 +1,17 @@
+spring:
+  kafka:
+    streams:
+      application-id: greetings-kafka-stream
+    consumer:
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: default-group
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap-servers: localhost:9092
+  docker:
+    compose:
+      lifecycle-management: start_only
