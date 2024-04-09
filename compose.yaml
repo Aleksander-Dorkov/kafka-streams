@@ -1,4 +1,4 @@
-name: 'postgres-redis-kafka'
+name: 'kafka-streams'
 services:
   redis:
     image: redis:7.2.1

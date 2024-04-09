@@ -18,16 +18,21 @@ public class Api {
 
     @PostMapping("/greetings_one")
     public void publish() {
-        this.kafkaProducer.sendMessageOne("First" + counter1++);
+        this.kafkaProducer.publishGreetingOne("First" + counter1++);
     }
 
     @PostMapping("/greetings_two")
     public void publish2() {
-        this.kafkaProducer.sendMessageTwo("Second" + counter2++);
+        this.kafkaProducer.publishGreetingTwo("Second" + counter2++);
     }
 
     @PostMapping("/greetings_as_json")
     public void publish2(@RequestBody Greeting greeting) throws JsonProcessingException {
-        this.kafkaProducer.sendMessageOne(greeting);
+        this.kafkaProducer.publishGreetingOne(greeting);
+    }
+
+    @PostMapping("/order_as_json")
+    public void publish3() {
+        this.kafkaProducer.publishDummyOrders();
     }
 }
