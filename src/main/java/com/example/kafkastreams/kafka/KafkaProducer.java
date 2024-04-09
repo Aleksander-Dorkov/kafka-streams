@@ -21,8 +21,7 @@ import static com.example.kafkastreams.kafka.KafkaTopics.ORDERS;
 @RequiredArgsConstructor
 public class KafkaProducer {
 
-    private final ObjectMapper objectMapper;
-    ;
+    private final ObjectMapper mapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final Random random = new Random();
 
@@ -36,14 +35,14 @@ public class KafkaProducer {
     }
 
     public void publishGreetingOne(Greeting message) throws JsonProcessingException {
-        kafkaTemplate.send(GREETINGS_ONE, key(), objectMapper.writeValueAsString(message));
+        kafkaTemplate.send(GREETINGS_ONE, key(), mapper.writeValueAsString(message));
     }
 
     public void publishDummyOrders() {
         getDummyOrders().forEach(order -> {
             String str;
             try {
-                str = objectMapper.writeValueAsString(order);
+                str = mapper.writeValueAsString(order);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

@@ -6,6 +6,7 @@ import com.example.kafkastreams.kafka.serdes.CustomSerdes;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Branched;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StreamTopology {
+
+    //    StreamsConfig.NUM_STREAM_THREADS_CONFIG - to adjust the amount of threads used in a stream
 
     // merge topology
     @Autowired
