@@ -14,6 +14,7 @@ public class KafkaTopics {
     public static final String ORDERS = "orders";
     public static final String GENERAL_ORDERS = "general_orders";
     public static final String RESTAURANT_ORDERS = "restaurant_orders";
+    public static final String WORDS = "words";
 
     @Bean
     public NewTopic topicBuilder() {
@@ -58,6 +59,14 @@ public class KafkaTopics {
     @Bean
     public NewTopic topicBuilder6() {
         return TopicBuilder.name(RESTAURANT_ORDERS)
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic topicBuilder7() {
+        return TopicBuilder.name(WORDS)
                 .partitions(1)
                 .replicas(1)
                 .build();

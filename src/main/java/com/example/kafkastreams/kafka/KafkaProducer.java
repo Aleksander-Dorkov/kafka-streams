@@ -16,6 +16,7 @@ import java.util.Random;
 import static com.example.kafkastreams.kafka.KafkaTopics.GREETINGS_ONE;
 import static com.example.kafkastreams.kafka.KafkaTopics.GREETINGS_TWO;
 import static com.example.kafkastreams.kafka.KafkaTopics.ORDERS;
+import static com.example.kafkastreams.kafka.KafkaTopics.WORDS;
 
 @Component
 @RequiredArgsConstructor
@@ -48,6 +49,10 @@ public class KafkaProducer {
             }
             kafkaTemplate.send(ORDERS, key(), str);
         });
+    }
+
+    public void publishWord(String word) {
+        kafkaTemplate.send(WORDS, key(), word);
     }
 
     private List<Order> getDummyOrders() {

@@ -6,10 +6,11 @@ import com.example.kafkastreams.kafka.serdes.CustomSerdes;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Branched;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Named;
 import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,4 +60,21 @@ public class StreamTopology {
                                         .to(KafkaTopics.RESTAURANT_ORDERS, Produced.with(Serdes.String(), CustomSerdes.ORDER)))
                 );
     }
+
+    @Autowired
+    public void kTableTopology(StreamsBuilder streamsBuilder) {
+        KTable<String, String> table = streamsBuilder
+                .table(KafkaTopics.WORDS,
+                        Consumed.with(Serdes.String(), Serdes.String()),
+                        Materialized.as("my-db-view")
+                );
+        table
+                .filter((k, v) -> v.length() > 2)
+                .toStream()
+                .peek((k, v) -> System.out.println("kTableTopology Received message: key=" + k + ", value=" + v));
+
+    }
+
+    //  Materialized.as("my-db-view") - once a msg is consumed, it keeps buffering for a certain time frame, and then take latest value and publishes it downstream
+    // basically when you spam swagger post it waits 20 sek or so and they publish them all at once
 }

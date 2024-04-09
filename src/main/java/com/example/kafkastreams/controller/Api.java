@@ -4,6 +4,7 @@ import com.example.kafkastreams.kafka.KafkaProducer;
 import com.example.kafkastreams.kafka.dto.Greeting;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,5 +35,10 @@ public class Api {
     @PostMapping("/order_as_json")
     public void publish3() {
         this.kafkaProducer.publishDummyOrders();
+    }
+
+    @PostMapping("/word_as_json/{word}")
+    public void publish4(@PathVariable String word) {
+        this.kafkaProducer.publishWord(word);
     }
 }
