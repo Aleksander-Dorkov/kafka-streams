@@ -8,7 +8,6 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Branched;
 import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
@@ -68,6 +67,7 @@ public class StreamTopology {
                         Consumed.with(Serdes.String(), Serdes.String()),
                         Materialized.as("my-db-view")
                 );
+
 
         table
                 .filter((k, v) -> v.length() > 2)

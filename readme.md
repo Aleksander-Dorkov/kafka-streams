@@ -71,5 +71,10 @@
 **KTable vs GlobalKTable:**
   - Normal KTable listens to only partition where GlobalKTable listens to all partitions
 
+**KStream and KTable load balancing**
+ - same as normal consumer API
+
+**KTable load balancing**
+- 4 k8s and 4 partitions - all of the k8s replicas will consume all of the partitions 
 
 stream requires less code the normal kafka without spring boot
