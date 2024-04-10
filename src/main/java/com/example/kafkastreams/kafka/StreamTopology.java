@@ -3,11 +3,11 @@ package com.example.kafkastreams.kafka;
 import com.example.kafkastreams.kafka.dto.Greeting;
 import com.example.kafkastreams.kafka.dto.Order;
 import com.example.kafkastreams.kafka.serdes.CustomSerdes;
-import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Branched;
 import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class StreamTopology {
 
     // merge topology
@@ -67,12 +66,37 @@ public class StreamTopology {
                         Consumed.with(Serdes.String(), Serdes.String()),
                         Materialized.as("my-db-view")
                 );
-
-
         table
                 .filter((k, v) -> v.length() > 2)
                 .toStream()
                 .peek((k, v) -> System.out.println("kTableTopology Received message: key=" + k + ", value=" + v));
+    }
 
+    // groupBy - count topology
+    //after app restart it would have saved the total count of msgs
+    @Autowired
+    public void aggregateCountTopology(StreamsBuilder streamsBuilder) {
+        KStream<String, String> countStream = streamsBuilder
+                .stream(KafkaTopics.AGGREGATE_COUNT, Consumed.with(Serdes.String(), Serdes.String()));
+
+        countStream
+                .peek((k, v) -> System.out.println("countStream Received message: key=" + k + ", value=" + v))
+                .groupByKey(Grouped.with(Serdes.String(), Serdes.String()))
+                .count(Named.as("count-per-alphabet"))
+                .toStream()
+                .peek((k, v) -> System.out.println("count-per-alphabet Received message: key=" + k + ", value=" + v)); // the v is the count of all msgs with the same key
+    }
+
+    @Autowired
+    public void aggregateReduceTopology(StreamsBuilder streamsBuilder) {
+        KStream<String, String> reduceStream = streamsBuilder
+                .stream(KafkaTopics.AGGREGATE_REDUCE, Consumed.with(Serdes.String(), Serdes.String()));
+
+        reduceStream
+                .peek((k, v) -> System.out.println("reduceStream Received message: key=" + k + ", value=" + v))
+                .groupByKey(Grouped.with(Serdes.String(), Serdes.String()))
+                .reduce((v1, v2) -> v1 + "-" + v2)
+                .toStream()
+                .peek((k, v) -> System.out.println("after reduce message: key=" + k + ", value=" + v)); // after reduce message: key=a, value=1-2-3-4-5
     }
 }

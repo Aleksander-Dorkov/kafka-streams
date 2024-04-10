@@ -77,3 +77,11 @@
 - 4 k8s and 4 partitions - all of the k8s replicas will consume all of the partitions 
 
 stream requires less code the normal kafka without spring boot
+
+**Statefull operations in Kafka streams**
+- Aggregation of data
+  - count, reduce, aggregate
+- Joining Data
+  - join leftJoin, outerJoin
+- Windowing Data
+  - windowedBy

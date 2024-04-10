@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
+import static com.example.kafkastreams.kafka.KafkaTopics.AGGREGATE_COUNT;
+import static com.example.kafkastreams.kafka.KafkaTopics.AGGREGATE_REDUCE;
 import static com.example.kafkastreams.kafka.KafkaTopics.GREETINGS_ONE;
 import static com.example.kafkastreams.kafka.KafkaTopics.GREETINGS_TWO;
 import static com.example.kafkastreams.kafka.KafkaTopics.ORDERS;
@@ -57,6 +59,14 @@ public class KafkaProducer {
 
     public void publishWord(String key, String value) {
         kafkaTemplate.send(WORDS, key, value);
+    }
+
+    public void publishAggregateCount(String key, String value) {
+        kafkaTemplate.send(AGGREGATE_COUNT, key, value);
+    }
+
+    public void publishAggregateReduce(String key, String value) {
+        kafkaTemplate.send(AGGREGATE_REDUCE, key, value);
     }
 
     private List<Order> getDummyOrders() {

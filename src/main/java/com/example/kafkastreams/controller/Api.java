@@ -44,6 +44,16 @@ public class Api {
 
     @PostMapping("/word_as_string/{key}/{value}")
     public void publish4(@PathVariable String key, @PathVariable String value) {
-        this.kafkaProducer.publishWord(key,value);
+        this.kafkaProducer.publishWord(key, value);
+    }
+
+    @PostMapping("/aggregate_count_as_string/{key}/{value}")
+    public void publish5(@PathVariable String key, @PathVariable String value) {
+        this.kafkaProducer.publishAggregateCount(key, value);
+    }
+
+    @PostMapping("/aggregate_reduce_as_string/{key}/{value}")
+    public void publish6(@PathVariable String key, @PathVariable String value) {
+        this.kafkaProducer.publishAggregateReduce(key, value);
     }
 }

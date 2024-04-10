@@ -15,6 +15,8 @@ public class KafkaTopics {
     public static final String GENERAL_ORDERS = "general_orders";
     public static final String RESTAURANT_ORDERS = "restaurant_orders";
     public static final String WORDS = "words";
+    public static final String AGGREGATE_COUNT = "aggregate_count";
+    public static final String AGGREGATE_REDUCE = "aggregate_reduce";
 
     @Bean
     public NewTopic topicBuilder() {
@@ -67,6 +69,22 @@ public class KafkaTopics {
     @Bean
     public NewTopic topicBuilder7() {
         return TopicBuilder.name(WORDS)
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic topicBuilder8() {
+        return TopicBuilder.name(AGGREGATE_COUNT)
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    public NewTopic topicBuilder9() {
+        return TopicBuilder.name(AGGREGATE_REDUCE)
                 .partitions(1)
                 .replicas(1)
                 .build();
