@@ -8,6 +8,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Branched;
 import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.GlobalKTable;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
@@ -19,8 +20,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StreamTopology {
-
-    //    StreamsConfig.NUM_STREAM_THREADS_CONFIG - to adjust the amount of threads used in a stream
 
     // merge topology
     @Autowired
@@ -61,6 +60,7 @@ public class StreamTopology {
                 );
     }
 
+    // KTable topology
     @Autowired
     public void kTableTopology(StreamsBuilder streamsBuilder) {
         KTable<String, String> table = streamsBuilder
@@ -68,13 +68,11 @@ public class StreamTopology {
                         Consumed.with(Serdes.String(), Serdes.String()),
                         Materialized.as("my-db-view")
                 );
+
         table
                 .filter((k, v) -> v.length() > 2)
                 .toStream()
                 .peek((k, v) -> System.out.println("kTableTopology Received message: key=" + k + ", value=" + v));
 
     }
-
-    //  Materialized.as("my-db-view") - once a msg is consumed, it keeps buffering for a certain time frame, and then take latest value and publishes it downstream
-    // basically when you spam swagger post it waits 20 sek or so and they publish them all at once
 }
