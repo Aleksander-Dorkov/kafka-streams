@@ -55,6 +55,10 @@ public class KafkaProducer {
         kafkaTemplate.send(WORDS, key(), word);
     }
 
+    public void publishWord(String key, String value) {
+        kafkaTemplate.send(WORDS, key, value);
+    }
+
     private List<Order> getDummyOrders() {
         var generalOrder = Order.builder()
                 .orderId(1)

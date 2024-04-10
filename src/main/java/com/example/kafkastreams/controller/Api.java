@@ -37,8 +37,13 @@ public class Api {
         this.kafkaProducer.publishDummyOrders();
     }
 
-    @PostMapping("/word_as_json/{word}")
+    @PostMapping("/word_as_string_with_random_key/{word}")
     public void publish4(@PathVariable String word) {
         this.kafkaProducer.publishWord(word);
+    }
+
+    @PostMapping("/word_as_string/{key}/{value}")
+    public void publish4(@PathVariable String key, @PathVariable String value) {
+        this.kafkaProducer.publishWord(key,value);
     }
 }

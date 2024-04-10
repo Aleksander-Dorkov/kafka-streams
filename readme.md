@@ -62,4 +62,14 @@
   fault tolerance and state restoration purposes.
 
 
+**KTable vs KStream:**
+
+ - KTable can only subscribe to one topic
+ - KTable is stateful, KStream is stateless
+ - KTable doesn't forward every event, only the latest value for every event
+
+**KTable vs GlobalKTable:**
+  - Normal KTable listens to only partition where GlobalKTable listens to all partitions
+
+
 stream requires less code the normal kafka without spring boot
