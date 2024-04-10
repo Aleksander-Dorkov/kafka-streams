@@ -63,10 +63,9 @@
 
 
 **KTable vs KStream:**
-
  - KTable can only subscribe to one topic
  - KTable is stateful, KStream is stateless
- - KTable doesn't forward every event, only the latest value for every event
+ - KTable doesn't forward every event, only the latest value for every event. So if we send 4 events with same, but diff value only 1 event will be send downstream. 
 
 **KTable vs GlobalKTable:**
   - Normal KTable listens to only partition where GlobalKTable listens to all partitions
