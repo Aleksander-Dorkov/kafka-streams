@@ -3,6 +3,13 @@
 **Topology:**
 
 - **Definition:** A data pipeline or template outlining how data flows through the system.
+- it is a Directed Acyclic Graph (DAG)
+  - Acyclic - mean Non-Cyclical - a graph that does not repeat it self. It means it avoids cycles.
+  - Directed - the flow has a defined direction
+- It consist of the fallowing
+  - Multiple entry nodes Source nodes - like @KafkaListner
+  - User processor nodes - our custom logic like `.map()` and `.flter()`
+  -  Sink Processor nods - like `kafkaTemplate.send()`
 
 **Task:**
 
@@ -53,3 +60,6 @@
 - Processed records are stored in the local state store (RocksDB) under the name "my-db-view".
 - Updates to the state store are also written to the changelog topic 'greetings-kafka-stream-my-db-view-changelog' for
   fault tolerance and state restoration purposes.
+
+
+stream requires less code the normal kafka without spring boot
