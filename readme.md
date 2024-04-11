@@ -35,6 +35,7 @@
 - Use cases: any app that needs to maintain the latest value for a given key
 - `Materialized.as("my-db-view")` - creates a changelog topic called 'greetings-kafka-stream-my-db-view-changelog' used
   for fault tolerance and state restoration.. This is how get the latest k value after app restart.
+- if we don't specify ` Materialized.as("my-db-view")` it will still create that topic but we can not query it internally
 
 **RocksDB:**
 

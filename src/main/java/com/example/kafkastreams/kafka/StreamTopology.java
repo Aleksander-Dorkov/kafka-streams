@@ -92,11 +92,11 @@ public class StreamTopology {
         KStream<String, String> reduceStream = streamsBuilder
                 .stream(KafkaTopics.AGGREGATE_REDUCE, Consumed.with(Serdes.String(), Serdes.String()));
 
-        reduceStream
+         reduceStream
                 .peek((k, v) -> System.out.println("reduceStream Received message: key=" + k + ", value=" + v))
                 .groupByKey(Grouped.with(Serdes.String(), Serdes.String()))
                 .reduce((v1, v2) -> v1 + "-" + v2)
                 .toStream()
-                .peek((k, v) -> System.out.println("after reduce message: key=" + k + ", value=" + v)); // after reduce message: key=a, value=1-2-3-4-5
+                .peek((k, v) -> System.out.println("after reduce message: key=" + k + ", value=" + v));// after reduce message: key=a, value=1-2-3-4-5
     }
 }

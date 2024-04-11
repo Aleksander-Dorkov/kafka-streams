@@ -11,6 +11,7 @@ public class KafkaJsonDeserializer<T> implements Deserializer<T> {
     private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());;
     private final Class<T> type;
 
+
     public KafkaJsonDeserializer(Class<T> type) {
         this.type = type;
     }
