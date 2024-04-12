@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public record Order(
         Integer orderId,
+        String locationId,
         BigDecimal finalAmount,
         OrderType orderType,
         List<String> orderLineItems,

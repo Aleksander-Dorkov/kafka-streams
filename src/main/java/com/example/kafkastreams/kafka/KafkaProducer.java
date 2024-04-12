@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import static com.example.kafkastreams.kafka.KafkaTopics.AGGREGATE_COUNT;
 import static com.example.kafkastreams.kafka.KafkaTopics.AGGREGATE_REDUCE;
@@ -26,7 +27,6 @@ public class KafkaProducer {
 
     private final ObjectMapper mapper;
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final Random random = new Random();
 
 
     public void publishGreetingOne(String message) {
@@ -42,15 +42,7 @@ public class KafkaProducer {
     }
 
     public void publishDummyOrders() {
-        getDummyOrders().forEach(order -> {
-            String str;
-            try {
-                str = mapper.writeValueAsString(order);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            kafkaTemplate.send(ORDERS, key(), str);
-        });
+        getDummyOrders().forEach(order -> kafkaTemplate.send(ORDERS, key(), order));
     }
 
     public void publishWord(String word) {
@@ -69,8 +61,8 @@ public class KafkaProducer {
         kafkaTemplate.send(AGGREGATE_REDUCE, key, value);
     }
 
-    private List<Order> getDummyOrders() {
-        var generalOrder = Order.builder()
+    private List<String> getDummyOrders() {
+        var o1 = Order.builder()
                 .orderId(1)
                 .finalAmount(new BigDecimal("100.00"))
                 .orderType(Order.OrderType.GENERAL)
@@ -78,7 +70,7 @@ public class KafkaProducer {
                 .orderDteTime(LocalDateTime.now())
                 .build();
 
-        var restaurantOrder = Order.builder()
+        var o2 = Order.builder()
                 .orderId(2)
                 .finalAmount(new BigDecimal("50.00"))
                 .orderType(Order.OrderType.RESTAURANT)
@@ -86,7 +78,7 @@ public class KafkaProducer {
                 .orderDteTime(LocalDateTime.now())
                 .build();
 
-        var specialOrder = Order.builder()
+        var o3 = Order.builder()
                 .orderId(3)
                 .finalAmount(new BigDecimal("200.00"))
                 .orderType(Order.OrderType.GENERAL)
@@ -94,17 +86,25 @@ public class KafkaProducer {
                 .orderDteTime(LocalDateTime.now())
                 .build();
 
-        var expressOrder = Order.builder()
+        var o4 = Order.builder()
                 .orderId(4)
                 .finalAmount(new BigDecimal("75.00"))
                 .orderType(Order.OrderType.RESTAURANT)
                 .orderLineItems(List.of("Express Item 1"))
                 .orderDteTime(LocalDateTime.now())
                 .build();
-        return List.of(generalOrder, restaurantOrder, specialOrder, expressOrder);
+
+        return Stream.of(o1, o2, o3, o4)
+                .map(order -> {
+                    try {
+                        return mapper.writeValueAsString(order);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
     }
 
     private String key() {
-        return String.valueOf(random.nextInt(Integer.MAX_VALUE));
+        return String.valueOf(new Random().nextInt(Integer.MAX_VALUE));
     }
 }
